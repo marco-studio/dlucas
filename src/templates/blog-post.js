@@ -63,10 +63,22 @@ export default ({ data }) => {
         <div className="text-gray-900 font-medium text-xl mb-6 lg:text-2xl lgx:text-3xl">
           Episode Notes
         </div>
-        <div
+
+        {post.content.encoded === "" ? (
+          <div
+            className="lg:text-xl"
+            dangerouslySetInnerHTML={{ __html: post.itunes.summary }}
+          />
+        ) : (
+          <div
+            className="lg:text-xl"
+            dangerouslySetInnerHTML={{ __html: post.content.encoded }}
+          />
+        )}
+        {/* <div
           className="lg:text-xl"
-          dangerouslySetInnerHTML={{ __html: post.content }}
-        />
+          dangerouslySetInnerHTML={{ __html: post.content.encoded }}
+        /> */}
       </div>
 
       <div className="text-center p-8 max-w-md md:max-w-lg m-auto mt-8 lg:max-w-xl lgx:max-w-2xl lgx:mt-16">
@@ -105,11 +117,14 @@ export const query = graphql`
     feedGatsbyBlog(id: { eq: $slug }) {
       title
       pubDate
-      content
+      content {
+        encoded
+      }
       itunes {
         duration
         image
         subtitle
+        summary
       }
       enclosure {
         url
